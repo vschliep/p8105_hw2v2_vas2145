@@ -8,11 +8,14 @@ date: "2023-10-04"
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+#Loading Libraries
 ```{r}
 library(tidyverse)
 library(readxl)
 ```
 
+
+#Problem 1
 ```{r}
 month_df = 
   tibble(
@@ -65,6 +68,8 @@ data_538 =
 str(data_538)
 ```
 
+#Problem 2
+
 Loading trash wheel data, cleaning names, and calculating `homes_powered`
 ```{r}
 trashwheel_df =
@@ -92,11 +97,27 @@ gwynnda_trashwheel_df =
 
 
 Joining the datasets:
-
-
 ```{r}
 trashwheel_df =
   bind_rows(trashwheel_df, prof_trashwheel_df, gwynnda_trashwheel_df) |> 
   janitor::clean_names()
 ```
+
+The `trashwheel_df` has `trashwheel_df observations` and `trashwheel_df col` and includes information on the trashwheel being used, the `dumpster` it places its trash in, and the amount of `homes_powered` by the trash that comes from each trashwheel. 
+
+
+#Problem 3
+
+Importing, cleaning, and tidying dataset of baseline demographics.
+
+```{r}
+baseline_df =
+  read_csv("data/data_mci/MCI_baseline.csv", skip = 1) |> 
+  janitor::clean_names() |> 
+  mutate(
+    sex = recode(sex, "1" = "male", "0" = "female"),
+    apoe4 = recode(apoe4, "1" = "APOE4 carrier", "0" = "APOE4 non-carrier")) |> 
+  filter(age_at_onset >= current_age | age_at_onset == ".")
+```
+
 
