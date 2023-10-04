@@ -118,6 +118,37 @@ baseline_df =
     sex = recode(sex, "1" = "male", "0" = "female"),
     apoe4 = recode(apoe4, "1" = "APOE4 carrier", "0" = "APOE4 non-carrier")) |> 
   filter(age_at_onset >= current_age | age_at_onset == ".")
+
+developedmci_df =
+  baseline_df |> 
+  filter(age_at_onset != ".")
 ```
 
+We first import the data required to create the the dataframe. We need to `skip = 1` since the first row does not contain data, and recode `sex` and `apoe4` so that they are appropriately encoded (not numeric). Finally, we use `filter` to remove anyone who does not have MCI at baseline. There are `baseline_df, nrow()` observations, of whom 94 develop MCI. The mean baseline age is `baseline_df, mean(pull(current_age).` The proportion of women in the study who are APOE3 carriers is 30%. 
 
+
+Cleaning second MCI dataset:
+```{r}
+amyloid_df =
+  read_csv("data/data_mci/mci_amyloid.csv", skip = 1) |> 
+  janitor::clean_names() |> 
+  rename(id = study_id)
+```
+
+We first import the data required to create the the amyloid dataframe. We need to `skip = 1` since the first row does not contain data, and `rename` `study_id` to `id` so that we can merge this dataset with the baseline dataset. The `amyloid_df` includes `amyloid_df, nrow()` observations.
+
+There are 7 more participants in the amyloid dataset than in the baseline dataset. 232 of the participants are apoe4 carriers.
+
+Combining datasets:
+```{r}
+combined_mci_df =
+  inner_join(baseline_df, amyloid_df, by = "id")
+
+write.csv(combined_mci_df, file = "data/data_mci/combined_mci_df.csv")
+
+filter(combined_mci_df, sex == "female", TRUE)
+filter(combined_mci_df, apoe4 == "APOE4 carrier", TRUE)
+
+```
+
+The combined_mci_df has 472 observations with 11 variables. 205 of participants in the combined dataset are women. 
