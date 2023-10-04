@@ -418,7 +418,7 @@ pols =
 ## ℹ Use `spec()` to retrieve the full column specification for this data.
 ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
 ## Joining with `by = join_by(month_abb)`</code></pre>
-<p>Now we merge the three datasets!</p>
+<p>Merging datasets</p>
 <pre class="r"><code>data_538 = 
   left_join(pols, snp) |&gt;
   left_join(x = _, y = unemployment)</code></pre>
@@ -439,6 +439,17 @@ pols =
 ##  $ month_abb   : chr [1:822] &quot;Jan&quot; &quot;Feb&quot; &quot;Mar&quot; &quot;Apr&quot; ...
 ##  $ close       : num [1:822] NA NA NA NA NA NA NA NA NA NA ...
 ##  $ unemployment: num [1:822] NA NA NA NA NA NA NA NA NA NA ...</code></pre>
+<p>Loading trash wheel data, cleaning names, and calculating
+<code>homes_powered</code></p>
+<pre class="r"><code>trashwheel_df =
+  read_excel(&quot;data/trash_data.xlsx&quot;, sheet = &quot;Mr. Trash Wheel&quot;, skip = 1, col_names = TRUE) |&gt; 
+  janitor::clean_names() |&gt; 
+  mutate(homes_powered = (weight_tons * 500) / 30,
+    trash_wheel = 1,
+    year = as.numeric(year))</code></pre>
+<pre><code>## New names:
+## • `` -&gt; `...15`
+## • `` -&gt; `...16`</code></pre>
 
 
 

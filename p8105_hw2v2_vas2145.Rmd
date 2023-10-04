@@ -65,3 +65,13 @@ data_538 =
 str(data_538)
 ```
 
+Loading trash wheel data, cleaning names, and calculating `homes_powered`
+```{r}
+trashwheel_df =
+  read_excel("data/trash_data.xlsx", sheet = "Mr. Trash Wheel", skip = 1, col_names = TRUE) |> 
+  janitor::clean_names() |> 
+  mutate(homes_powered = (weight_tons * 500) / 30,
+    trash_wheel = 1,
+    year = as.numeric(year))
+```
+
