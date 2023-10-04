@@ -75,3 +75,28 @@ trashwheel_df =
     year = as.numeric(year))
 ```
 
+Loading Professor Trash Wheel and Gwynnda data, cleaning, and organizing.
+```{r}
+prof_trashwheel_df =
+  read_excel("data/trash_data.xlsx", sheet = "Professor Trash Wheel", skip = 1, col_names = TRUE) |> 
+  janitor::clean_names() |> 
+  mutate(homes_powered = (weight_tons * 500) / 30,
+         trash_wheel = 2)
+
+gwynnda_trashwheel_df =
+  read_excel("data/trash_data.xlsx", sheet = "Gwynnda Trash Wheel", skip = 1, col_names = TRUE) |> 
+  janitor::clean_names() |> 
+  mutate(homes_powered = (weight_tons * 500) / 30,
+         trash_wheel = 3)
+```
+
+
+Joining the datasets:
+
+
+```{r}
+trashwheel_df =
+  bind_rows(trashwheel_df, prof_trashwheel_df, gwynnda_trashwheel_df) |> 
+  janitor::clean_names()
+```
+

@@ -450,6 +450,23 @@ pols =
 <pre><code>## New names:
 ## • `` -&gt; `...15`
 ## • `` -&gt; `...16`</code></pre>
+<p>Loading Professor Trash Wheel and Gwynnda data, cleaning, and
+organizing.</p>
+<pre class="r"><code>prof_trashwheel_df =
+  read_excel(&quot;data/trash_data.xlsx&quot;, sheet = &quot;Professor Trash Wheel&quot;, skip = 1, col_names = TRUE) |&gt; 
+  janitor::clean_names() |&gt; 
+  mutate(homes_powered = (weight_tons * 500) / 30,
+         trash_wheel = 2)
+
+gwynnda_trashwheel_df =
+  read_excel(&quot;data/trash_data.xlsx&quot;, sheet = &quot;Gwynnda Trash Wheel&quot;, skip = 1, col_names = TRUE) |&gt; 
+  janitor::clean_names() |&gt; 
+  mutate(homes_powered = (weight_tons * 500) / 30,
+         trash_wheel = 3)</code></pre>
+<p>Joining the datasets:</p>
+<pre class="r"><code>trashwheel_df =
+  bind_rows(trashwheel_df, prof_trashwheel_df, gwynnda_trashwheel_df) |&gt; 
+  janitor::clean_names()</code></pre>
 
 
 
